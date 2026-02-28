@@ -70,16 +70,17 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 // Start server
 const startServer = async () => {
   try {
-    // Create database if it doesn't exist
-    await ensureDatabaseExists();
-
-    // Initialize PostgreSQL
-    await initializeDatabase();
-    console.log('PostgreSQL initialized');
-
-    // Seed sample data
-    await seedSampleData();
-    console.log('Sample data seeded');
+    // Try to initialize PostgreSQL (optional for cloud deployment)
+    try {
+      await ensureDatabaseExists();
+      await initializeDatabase();
+      await seedSampleData();
+      console.log('✅ PostgreSQL initialized');
+    } catch (pgError) {
+      console.warn('⚠️ PostgreSQL initialization failed - running in MongoDB-only mode');
+      console.warn('Details:', pgError instanceof Error ? pgError.message : pgError);
+      console.log('Assignments will still work via MongoDB');
+    }
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

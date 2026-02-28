@@ -64,6 +64,10 @@ export const executeQuery = async (query: string): Promise<QueryResultData> => {
     };
   } catch (error) {
     if (error instanceof Error) {
+      // Handle connection refused errors gracefully
+      if (error.message.includes('ECONNREFUSED') || error.message.includes('connect')) {
+        throw new Error('PostgreSQL database is not available. Query execution is disabled.');
+      }
       // Return structured error response
       throw {
         success: false,
