@@ -1,0 +1,10 @@
+{
+  "name": "ciphersqlstudio",
+  "version": "1.0.0",
+  "description": "CipherSQLStudio - Master SQL through Interactive Learning",
+  "private": true,
+  "scripts": {
+    "build": "cd backend && npm install && npm run build",
+    "start": "cd backend && npm start"
+  }
+}

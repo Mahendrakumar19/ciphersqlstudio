@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: ciphersqlstudio-backend
+    runtime: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    rootDir: backend
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        value: ${{MONGODB_URI}}
+      - key: POSTGRES_HOST
+        value: ${{POSTGRES_HOST}}
+      - key: POSTGRES_PORT
+        value: ${{POSTGRES_PORT}}
+      - key: POSTGRES_USER
+        value: ${{POSTGRES_USER}}
+      - key: POSTGRES_PASSWORD
+        value: ${{POSTGRES_PASSWORD}}
+      - key: POSTGRES_DB
+        value: ${{POSTGRES_DB}}
+      - key: OPENAI_API_KEY
+        value: ${{OPENAI_API_KEY}}
+      - key: GEMINI_API_KEY
+        value: ${{GEMINI_API_KEY}}
+      - key: PORT
+        value: 5000
