@@ -4,6 +4,7 @@
   "description": "CipherSQLStudio - Master SQL through Interactive Learning",
   "private": true,
   "scripts": {
+    "postinstall": "cd backend && npm install && npm run build",
     "build": "cd backend && npm install && npm run build",
     "start": "cd backend && npm start"
   }
