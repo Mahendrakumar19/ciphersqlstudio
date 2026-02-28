@@ -50,6 +50,21 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+// Root route
+app.get('/', (req: Request, res: Response) => {
+  res.json({
+    name: 'CipherSQLStudio API',
+    version: '1.0.0',
+    status: 'running',
+    endpoints: {
+      health: '/api/health',
+      assignments: '/api/assignments',
+      execute: '/api/query/execute',
+      hint: '/api/hint'
+    }
+  });
+});
+
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'OK', timestamp: new Date() });
