@@ -1,0 +1,338 @@
+@use '../main' as *;
+
+.assignment-attempt-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .header {
+    background-color: $background-light;
+    border-bottom: 1px solid $border-color;
+    padding: 0.75rem 1rem;
+    @include flex-between;
+
+    @media (min-width: $tablet) {
+      padding: 1rem 1.5rem;
+    }
+
+    .back-button {
+      @include reset-button;
+      @include button-base;
+      background-color: rgba($primary-color, 0.1);
+      color: $primary-color;
+      margin-right: 0.75rem;
+      font-size: 0.85rem;
+
+      &:hover {
+        background-color: rgba($primary-color, 0.2);
+      }
+    }
+
+    h1 {
+      flex: 1;
+      font-size: clamp(1rem, 4vw, 1.5rem);
+
+      @media (min-width: $tablet) {
+        font-size: clamp(1.2rem, 5vw, 1.75rem);
+      }
+    }
+
+    .difficulty {
+      margin-left: 0.75rem;
+      font-size: 0.8rem;
+    }
+  }
+
+  .attempt-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 1px;
+    background-color: $border-color;
+    overflow: hidden;
+  }
+
+  // Resize Handles
+  .resize-handle-horizontal {
+    width: 5px;
+    background-color: $border-color;
+    cursor: col-resize;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: $primary-color;
+    }
+  }
+
+  .resize-handle-vertical {
+    height: 5px;
+    background-color: $border-color;
+    cursor: row-resize;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: $primary-color;
+    }
+  }
+
+  // Top Section - Left and Right Panels
+  .top-section {
+    display: flex;
+    flex: 1;
+    gap: 1px;
+    background-color: $border-color;
+    overflow: hidden;
+
+    @media (max-width: calc($desktop - 1px)) {
+      flex-direction: column;
+    }
+  }
+
+  // Left Panel
+  .left-panel {
+    background-color: $background-light;
+    padding: 1rem;
+    overflow-y: auto;
+    flex: 0 0 25%;
+    border-right: 1px solid $border-color;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+
+    @media (max-width: calc($desktop - 1px)) {
+      flex: 0 1 auto;
+      border-right: none;
+      border-bottom: 1px solid $border-color;
+    }
+
+    .question-section {
+      margin-bottom: 0.25rem;
+
+      h2 {
+        font-size: clamp(1rem, 3vw, 1.15rem);
+        margin-bottom: 0.75rem;
+        color: $primary-color;
+      }
+
+      .question-text {
+        color: $text-secondary;
+        line-height: 1.5;
+        margin-bottom: 0.75rem;
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+      }
+
+      .description {
+        background-color: rgba($primary-color, 0.05);
+        padding: 0.75rem;
+        border-radius: 0.4rem;
+        border-left: 3px solid $primary-color;
+
+        h3 {
+          font-size: clamp(0.85rem, 2vw, 0.95rem);
+          margin-bottom: 0.4rem;
+        }
+
+        p {
+          color: $text-secondary;
+          font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+        }
+      }
+    }
+
+    .toggle-data-button {
+      @include button-base;
+      width: 100%;
+      background-color: rgba($secondary-color, 0.1);
+      color: $secondary-color;
+      justify-content: center;
+      margin: 0;
+      font-size: 0.8rem;
+      padding: 0.5rem;
+
+      &:hover {
+        background-color: rgba($secondary-color, 0.2);
+      }
+    }
+
+    .hint-button {
+      @include button-base;
+      background-color: rgba($warning-color, 0.1);
+      color: $warning-color;
+      justify-content: center;
+      font-size: 0.8rem;
+      padding: 0.5rem;
+
+      &:hover:not(:disabled) {
+        background-color: rgba($warning-color, 0.2);
+      }
+    }
+
+    .hint-section {
+      background-color: rgba($warning-color, 0.05);
+      border: 1px solid rgba($warning-color, 0.3);
+      border-radius: 0.4rem;
+      padding: 0.75rem;
+      position: relative;
+
+      h3 {
+        color: $warning-color;
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+        margin-bottom: 0.5rem;
+      }
+
+      .hint-text {
+        color: $text-secondary;
+        font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+        line-height: 1.4;
+        margin-bottom: 0.4rem;
+      }
+
+      .close-hint {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        @include reset-button;
+        color: $warning-color;
+        font-size: 1rem;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+
+  // Right Panel (Editor & Controls)
+  .right-panel {
+    background-color: #1e1e1e;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+    overflow: hidden;
+
+    @media (max-width: calc($desktop - 1px)) {
+      min-height: 350px;
+    }
+
+    .editor-section {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
+      h3 {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid $border-color;
+        color: $text-primary;
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+      }
+
+      > div:nth-child(2) {
+        flex: 1;
+      }
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      flex-direction: row;
+      background-color: rgba(0, 0, 0, 0.3);
+      border-top: 1px solid $border-color;
+
+      .execute-button {
+        @include button-base;
+        background: linear-gradient(135deg, $primary-color, $secondary-color);
+        color: white;
+        flex: 1;
+        font-size: 0.8rem;
+        padding: 0.5rem;
+
+        &:hover:not(:disabled) {
+          opacity: 0.9;
+        }
+      }
+    }
+
+    .error-section {
+      background-color: rgba($danger-color, 0.1);
+      border: 1px solid rgba($danger-color, 0.3);
+      border-radius: 0.4rem;
+      padding: 0.75rem;
+      margin: 0.75rem;
+      margin-bottom: 0;
+
+      h3 {
+        color: $danger-color;
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+        margin-bottom: 0.4rem;
+      }
+
+      .error-message {
+        color: $text-secondary;
+        font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+        word-break: break-word;
+      }
+    }
+  }
+
+  // Bottom Section - Results
+  .bottom-section {
+    background-color: $background-light;
+    padding: 1rem;
+    overflow-y: auto;
+    flex: 0 0 30%;
+    border-top: 1px solid $border-color;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: calc($desktop - 1px)) {
+      flex: 0 0 auto;
+      max-height: 50vh;
+    }
+
+    .results-section {
+      background-color: rgba($success-color, 0.05);
+      border: 1px solid rgba($success-color, 0.3);
+      border-radius: 0.4rem;
+      padding: 0.75rem;
+      overflow: hidden;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .results-header {
+        @include flex-between;
+        margin-bottom: 0.75rem;
+
+        h3 {
+          color: $success-color;
+          font-size: clamp(0.8rem, 2vw, 0.9rem);
+        }
+
+        .close-results {
+          @include reset-button;
+          color: $success-color;
+          font-size: 1rem;
+          cursor: pointer;
+
+          &:hover {
+            opacity: 0.7;
+          }
+        }
+      }
+    }
+
+    .placeholder {
+      @include flex-center;
+      color: $text-secondary;
+      text-align: center;
+      padding: 1rem;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+    }
+  }
+}

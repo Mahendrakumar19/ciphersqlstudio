@@ -1,0 +1,120 @@
+@use '../main' as *;
+
+.assignment-list-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .header {
+    background: linear-gradient(135deg, $primary-color, $secondary-color);
+    @include responsive-padding;
+    text-align: center;
+    color: white;
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+
+      @media (min-width: $tablet) {
+        font-size: 3rem;
+      }
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      opacity: 0.9;
+
+      @media (min-width: $tablet) {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  .main-content {
+    flex: 1;
+    @include responsive-padding;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+
+    .assignments-section {
+      h2 {
+        margin-bottom: 1.5rem;
+        color: $text-primary;
+      }
+
+      .assignments-grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: 1fr;
+
+        @media (min-width: $tablet) {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem;
+        }
+
+        @media (min-width: $desktop) {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2rem;
+        }
+      }
+
+      .assignment-card {
+        @include card-base;
+        display: block;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .card-content {
+          h3 {
+            color: $primary-color;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+          }
+
+          .description {
+            color: $text-secondary;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            flex: 1;
+          }
+
+          .card-footer {
+            @include flex-between;
+            padding-top: 1rem;
+            border-top: 1px solid $border-color;
+
+            .arrow {
+              color: $primary-color;
+              font-size: 1.5rem;
+            }
+          }
+        }
+      }
+
+      .no-assignments,
+      .loading,
+      .error {
+        text-align: center;
+        padding: 3rem 1rem;
+      }
+    }
+  }
+
+  .footer {
+    background-color: $background-light;
+    border-top: 1px solid $border-color;
+    padding: 1.5rem;
+    text-align: center;
+    color: $text-secondary;
+    font-size: 0.9rem;
+    margin-top: auto;
+  }
+}

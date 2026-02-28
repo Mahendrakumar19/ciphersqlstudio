@@ -1,0 +1,187 @@
+// SCSS Variables
+$primary-color: #6366f1;
+$secondary-color: #8b5cf6;
+$accent-color: #ec4899;
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$danger-color: #ef4444;
+$background-dark: #0f172a;
+$background-light: #1e293b;
+$text-primary: #f1f5f9;
+$text-secondary: #cbd5e1;
+$border-color: #334155;
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+
+// Breakpoints
+$mobile: 320px;
+$tablet: 641px;
+$desktop: 1024px;
+$large-desktop: 1281px;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin reset-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+@mixin responsive-padding {
+  padding: 1rem;
+
+  @media (min-width: $tablet) {
+    padding: 1.5rem;
+  }
+
+  @media (min-width: $desktop) {
+    padding: 2rem;
+  }
+}
+
+@mixin button-base {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  touch-action: manipulation;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@mixin card-base {
+  background: $background-light;
+  border: 1px solid $border-color;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $primary-color;
+    box-shadow: $shadow-md;
+  }
+}
+
+// Global Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+
+  @media (min-width: $tablet) {
+    font-size: 17px;
+  }
+
+  @media (min-width: $desktop) {
+    font-size: 18px;
+  }
+}
+
+body {
+  background-color: $background-dark;
+  color: $text-primary;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+
+// Utility Classes
+.loading {
+  @include flex-center;
+  color: $text-secondary;
+  font-style: italic;
+  padding: 2rem;
+}
+
+.error {
+  background-color: rgba($danger-color, 0.1);
+  border-left: 4px solid $danger-color;
+  color: $danger-color;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+}
+
+.success {
+  background-color: rgba($success-color, 0.1);
+  border-left: 4px solid $success-color;
+  color: $success-color;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+}
+
+.difficulty {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  &-easy {
+    background-color: rgba($success-color, 0.2);
+    color: $success-color;
+  }
+
+  &-medium {
+    background-color: rgba($warning-color, 0.2);
+    color: $warning-color;
+  }
+
+  &-hard {
+    background-color: rgba($danger-color, 0.2);
+    color: $danger-color;
+  }
+}

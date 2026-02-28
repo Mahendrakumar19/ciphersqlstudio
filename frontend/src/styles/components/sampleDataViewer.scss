@@ -1,0 +1,156 @@
+@use '../main' as *;
+
+.sample-data-viewer {
+  background-color: rgba($primary-color, 0.05);
+  border: 1px solid rgba($primary-color, 0.2);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+
+  h3 {
+    color: $primary-color;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .table-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    select {
+      padding: 0.5rem;
+      background-color: $background-light;
+      color: $text-primary;
+      border: 1px solid $border-color;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+
+      &:hover {
+        border-color: $primary-color;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+      }
+    }
+  }
+
+  .loading {
+    text-align: center;
+    color: $text-secondary;
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .schema-info {
+    margin-bottom: 1.5rem;
+
+    h4 {
+      font-size: 0.9rem;
+      color: $secondary-color;
+      margin-bottom: 0.75rem;
+    }
+
+    .schema-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      li {
+        background-color: rgba($background-light, 0.5);
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.8rem;
+        font-family: 'Courier New', monospace;
+
+        strong {
+          color: $text-primary;
+        }
+      }
+    }
+  }
+
+  .data-table-container {
+    margin-top: 1rem;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 300px;
+    border: 1px solid rgba($primary-color, 0.1);
+    border-radius: 0.25rem;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba($border-color, 0.3);
+      border-radius: 3px;
+
+      &:hover {
+        background: rgba($border-color, 0.6);
+      }
+    }
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+
+    thead {
+      background-color: rgba($primary-color, 0.15);
+      position: sticky;
+      top: 0;
+
+      tr {
+        border-bottom: 1px solid rgba($primary-color, 0.2);
+      }
+
+      th {
+        padding: 0.5rem;
+        text-align: left;
+        font-weight: 600;
+        color: $primary-color;
+        word-break: break-word;
+        max-width: 100px;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid rgba($border-color, 0.1);
+
+        &:hover {
+          background-color: rgba($primary-color, 0.05);
+        }
+      }
+
+      td {
+        padding: 0.5rem;
+        color: $text-secondary;
+        word-break: break-word;
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-family: 'Courier New', monospace;
+      }
+    }
+  }
+}
