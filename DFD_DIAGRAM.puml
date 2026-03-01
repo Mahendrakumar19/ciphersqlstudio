@@ -1,0 +1,128 @@
+@startuml CipherSQLStudio_DFD
+!theme plain
+skinparam linetype ortho
+skinparam arrowThickness 2
+skinparam defaultTextAlignment center
+skinparam ComponentStyle uml2
+
+package "Data Flow Diagram - CipherSQLStudio" {
+    
+    ' ============= ACTORS =============
+    actor User as U
+    
+    ' ============= EXTERNAL SYSTEMS =============
+    rectangle "OpenAI API" as OpenAI #FFF9E6
+    rectangle "Gemini API" as Gemini #FFF9E6
+    rectangle "MongoDB Atlas" as MongoDB #E6F3FF
+    rectangle "PostgreSQL" as PostgreSQL #FFE6E6
+    
+    ' ============= FRONTEND (VERCEL) =============
+    package "Frontend (React + Vite)" as Frontend {
+        rectangle "Web Browser" as Browser #F0F0F0 {
+            rectangle "Assignment List" as AssignList #FFFACD
+            rectangle "SQL Editor\n(Monaco)" as Editor #FFFACD
+            rectangle "Results Display" as Results #FFFACD
+        }
+    }
+    
+    ' ============= API LAYER (RENDER) =============
+    package "Backend (Express API)" as Backend {
+        rectangle "Assignment Controller" as AssignCtrl #E6E6FA {
+            rectangle "GET /api/assignments" as GetAssign #D9D9FF
+            rectangle "GET /api/assignments/:id" as GetAssignId #D9D9FF
+        }
+        
+        rectangle "Query Controller" as QueryCtrl #E6E6FA {
+            rectangle "POST /api/query/execute" as ExecQuery #D9D9FF
+            rectangle "GET /api/query/schema" as GetSchema #D9D9FF
+            rectangle "GET /api/query/sample" as GetSample #D9D9FF
+        }
+        
+        rectangle "Hint Controller" as HintCtrl #E6E6FA {
+            rectangle "POST /api/hint" as GetHint #D9D9FF
+        }
+        
+        rectangle "Services Layer" as Services #FFE6E6 {
+            rectangle "Query Service\n(Validation, Execution)" as QueryService #FFD9D9
+            rectangle "LLM Service\n(OpenAI→Gemini→Local)" as LLMService #FFD9D9
+            rectangle "Assignment Service" as AssignService #FFD9D9
+        }
+        
+        rectangle "Cache\n(10-min TTL)" as Cache #FFFFCC {
+            rectangle "Hint Cache" as HintCache #FFFACD
+        }
+        
+        rectangle "Queue\n(Rate Limiting)" as Queue #FFFFCC {
+            rectangle "Request Queue\n(2-sec delays)" as ReqQueue #FFFACD
+        }
+    }
+    
+    ' ============= LOCAL DATABASES =============
+    package "Local Services" as Local {
+        rectangle "Local Hint DB\n(Fallback: 10+ hints)" as LocalDB #E6FFE6
+    }
+    
+    ' ============= CONNECTIONS =============
+    
+    ' User to Frontend
+    U -->|Views Page| Browser
+    Browser -->|User Input| U
+    
+    ' Frontend to Backend
+    AssignList -->|GET /api/assignments| GetAssign
+    GetAssign -->|201 OK\n(Assignment List)| AssignList
+    
+    Editor -->|POST /api/hint\n{question, code, error}| GetHint
+    GetHint -->|200 OK\n{hint: "..."}| Editor
+    
+    Editor -->|POST /api/query/execute\n{query}| ExecQuery
+    ExecQuery -->|200 OK\n{rows, columns}| Results
+    
+    Results -->|Display Results| Browser
+    
+    Editor -->|GET /api/query/schema/:table| GetSchema
+    GetSchema -->|Column Definitions| Editor
+    
+    Browser -->|GET /api/query/sample/:table| GetSample
+    GetSample -->|Sample Data| Browser
+    
+    ' Backend Services
+    GetAssign -->|Calls| AssignService
+    GetAssignId -->|Calls| AssignService
+    ExecQuery -->|Calls| QueryService
+    GetAssign -->|Calls| AssignService
+    GetHint -->|Calls| LLMService
+    
+    ' Caching & Queuing
+    LLMService -->|Check Cache| HintCache
+    HintCache -->|Cache Hit| LLMService
+    LLMService -->|Add to Queue| ReqQueue
+    ReqQueue -->|Process (2-sec delay)| LLMService
+    
+    ' LLM Fallback Chain
+    LLMService -->|1️⃣ Try| OpenAI
+    OpenAI -->|Rate Limited/Fail| LLMService
+    LLMService -->|2️⃣ Try| Gemini
+    Gemini -->|Fail| LLMService
+    LLMService -->|3️⃣ Use| LocalDB
+    LocalDB -->|Pre-written Hints| LLMService
+    
+    ' Services to Databases
+    AssignService -->|INSERT/SELECT\nAssignments| MongoDB
+    LLMService -->|Cache Hints| MongoDB
+    QueryService -->|SELECT Queries\n(Sandboxed)| PostgreSQL
+    
+    ' Return Data Flow
+    MongoDB -->|Assignment Data| AssignService
+    MongoDB -->|Cached Hints| HintCache
+    PostgreSQL -->|Query Results| QueryService
+    LocalDB -->|Fallback Hints| LLMService
+    
+    ' Response Flow
+    AssignService -->|Return Data| GetAssign
+    QueryService -->|Return Results| ExecQuery
+    LLMService -->|Return Hint| GetHint
+    
+}
+
+@enduml
